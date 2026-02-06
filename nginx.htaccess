@@ -3,9 +3,10 @@ location /cms/ {
 }
 
 location /food/ {
-    try_files $uri $uri/ /food/index.php?$args;
+    index index.html;
+    try_files $uri $uri/ /food/index.html;
 }
 
 location = /food/list {
-    try_files $uri $uri/ /food/list.php?$args;
+    try_files $uri $uri/ /food/index.html;
 }
