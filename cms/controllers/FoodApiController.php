@@ -62,4 +62,24 @@ class FoodApiController
             ]],
         ], JSON_UNESCAPED_UNICODE);
     }
+
+    public function detail(): void
+    {
+        $id = (int)($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['error' => '缺少内容参数'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $item = FoodItem::findById($id);
+        if (!$item || (int)$item['is_active'] !== 1) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['error' => '内容不存在'], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['item' => $item], JSON_UNESCAPED_UNICODE);
+    }
 }

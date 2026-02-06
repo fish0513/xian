@@ -53,5 +53,6 @@ $router->get('/admin/upload/list', [UploadController::class, 'list']);
 
 $router->get('/api/food/cover', [FoodApiController::class, 'cover']);
 $router->get('/api/food/list', [FoodApiController::class, 'list']);
+$router->get('/api/food/detail', [FoodApiController::class, 'detail']);
 
 $router->dispatch();

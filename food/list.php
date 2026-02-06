@@ -75,8 +75,9 @@ $categoryCode = trim($_GET['category_code'] ?? '');
             const address = escapeHtml(item.address || '');
             const phone = escapeHtml(item.phone || '');
             const hours = escapeHtml(item.business_hours || '');
+            const link = `/food/detail.php?id=${encodeURIComponent(item.id)}`;
             return `
-                <div class="list-item">
+                <a class="list-item" href="${link}">
                     ${cover ? `<img src="${cover}" alt="${title}">` : `<div style="width:120px;height:90px;background:#e5e7eb;border-radius:8px;"></div>`}
                     <div>
                         <div class="list-title">${title}</div>
@@ -87,7 +88,7 @@ $categoryCode = trim($_GET['category_code'] ?? '');
                             ${hours ? `<div>营业时间：${hours}</div>` : ''}
                         </div>
                     </div>
-                </div>
+                </a>
             `;
         };
 
