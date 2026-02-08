@@ -14,9 +14,9 @@ $categoryCode = trim($categoryCode ?? '');
 </div>
 
 <div id="list-root"
-     data-base="<?php echo View::e($base); ?>"
-     data-category-id="<?php echo View::e((string)$categoryId); ?>"
-     data-category-code="<?php echo View::e($categoryCode); ?>"></div>
+    data-base="<?php echo View::e($base); ?>"
+    data-category-id="<?php echo View::e((string)$categoryId); ?>"
+    data-category-code="<?php echo View::e($categoryCode); ?>"></div>
 
 <script>
     const listRoot = document.getElementById('list-root');

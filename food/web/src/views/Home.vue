@@ -1,6 +1,6 @@
 <template>
   <div class="home-page">
-    <HeroHeader title="吃在启东" />
+    <AppHeader :show-back="false" />
 
     <div v-if="loading" class="state-container">
       <van-loading color="#fff" />
@@ -38,7 +38,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getCover, type Category } from '../api/food'
 import FoodRow from '../components/FoodRow.vue'
-import HeroHeader from '../components/HeroHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 import SectionTitle from '../components/SectionTitle.vue'
 
 const router = useRouter()
@@ -76,7 +76,8 @@ onMounted(() => {
 .home-page {
   min-height: 100vh;
   padding-bottom: 40px;
-  background: var(--qd-bg-gradient);
+  padding-top: 200px;
+  background: var(--qd-bg);
 }
 
 .section {

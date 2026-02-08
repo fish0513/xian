@@ -2,11 +2,24 @@ location /cms/ {
     try_files $uri $uri/ /cms/index.php?s=$uri&$args;
 }
 
-location /food/ {
-    index index.html;
+location /food/assets {
+    alias "D:/www/xian/food/app/assets";
+    expires 7d;
+    add_header Cache-Control "public, immutable";
+}
+
+location /food {
+    alias "D:/www/xian/food/app";
     try_files $uri $uri/ /food/index.html;
 }
 
-location = /food/list {
-    try_files $uri $uri/ /food/index.html;
+location /travel/assets/ {
+    alias "D:/www/xian/travel/app/assets/";
+    expires 7d;
+    add_header Cache-Control "public, immutable";
+}
+
+location /travel {
+    alias "D:/www/xian/travel/app";
+    try_files $uri $uri/ /travel/index.html;
 }

@@ -20,6 +20,11 @@ require __DIR__ . '/controllers/FoodCategoryController.php';
 require __DIR__ . '/controllers/FoodItemController.php';
 require __DIR__ . '/controllers/FoodApiController.php';
 require __DIR__ . '/controllers/UploadController.php';
+require __DIR__ . '/models/TravelCategory.php';
+require __DIR__ . '/models/TravelItem.php';
+require __DIR__ . '/controllers/TravelCategoryController.php';
+require __DIR__ . '/controllers/TravelItemController.php';
+require __DIR__ . '/controllers/TravelApiController.php';
 
 $router = new Router();
 
@@ -54,5 +59,23 @@ $router->get('/admin/upload/list', [UploadController::class, 'list']);
 $router->get('/api/food/cover', [FoodApiController::class, 'cover']);
 $router->get('/api/food/list', [FoodApiController::class, 'list']);
 $router->get('/api/food/detail', [FoodApiController::class, 'detail']);
+
+$router->get('/admin/travel/categories', [TravelCategoryController::class, 'index']);
+$router->get('/admin/travel/categories/create', [TravelCategoryController::class, 'create']);
+$router->post('/admin/travel/categories/create', [TravelCategoryController::class, 'store']);
+$router->get('/admin/travel/categories/edit', [TravelCategoryController::class, 'edit']);
+$router->post('/admin/travel/categories/edit', [TravelCategoryController::class, 'update']);
+$router->post('/admin/travel/categories/delete', [TravelCategoryController::class, 'destroy']);
+
+$router->get('/admin/travel/items', [TravelItemController::class, 'index']);
+$router->get('/admin/travel/items/create', [TravelItemController::class, 'create']);
+$router->post('/admin/travel/items/create', [TravelItemController::class, 'store']);
+$router->get('/admin/travel/items/edit', [TravelItemController::class, 'edit']);
+$router->post('/admin/travel/items/edit', [TravelItemController::class, 'update']);
+$router->post('/admin/travel/items/delete', [TravelItemController::class, 'destroy']);
+
+$router->get('/api/travel/cover', [TravelApiController::class, 'cover']);
+$router->get('/api/travel/list', [TravelApiController::class, 'list']);
+$router->get('/api/travel/detail', [TravelApiController::class, 'detail']);
 
 $router->dispatch();

@@ -1,0 +1,40 @@
+:root {
+  --qd-bg: #007aff;
+  --qd-bg-gradient: linear-gradient(180deg, #6bf 0%, #007aff 30%);
+  --qd-card-bg: #a3d5ff;
+  --qd-text-strong: #0056b3;
+  --qd-text-sub: #4a8ac9;
+
+  --van-primary-color: var(--qd-bg);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--qd-bg);
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}

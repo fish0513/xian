@@ -160,7 +160,7 @@ watch(
   min-height: 100vh;
   background: var(--qd-bg);
   padding: 16px;
-  padding-top: 60px;
+  padding-top: 196px; /* 180px header + 16px padding */
 }
 
 .list-container {

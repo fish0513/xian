@@ -1,6 +1,8 @@
 <template>
   <div class="detail-page" v-if="item">
-    <AppHeader title="详情" :show-back="true" :on-back="() => router.back()" />
+    <div class="header">
+      <van-icon name="arrow-left" color="#fff" size="20" @click="router.back()" class="back-icon" />
+    </div>
     
     <van-image :src="item.cover_url" width="100%" height="250" fit="cover" />
     
@@ -44,7 +46,6 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getDetail, type FoodItem } from '../api/food'
-import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -73,7 +74,20 @@ onMounted(() => {
   min-height: 100vh;
   background: #f7f8fa;
   padding-bottom: 40px;
-  padding-top: 44px;
+  overflow-x: hidden;
+}
+
+.header {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+}
+
+.back-icon {
+  background: rgba(0,0,0,0.3);
+  padding: 8px;
+  border-radius: 50%;
 }
 
 .info-card {
@@ -130,6 +144,8 @@ onMounted(() => {
   font-size: 15px;
   line-height: 1.6;
   color: #333;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 .rich-content :deep(img) {
   max-width: 100%;

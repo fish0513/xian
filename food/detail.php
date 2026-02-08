@@ -11,20 +11,100 @@ $id = (int)($_GET['id'] ?? 0);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美食启东</title>
     <style>
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", sans-serif; background: #f7f7f8; color: #1f2937; }
-        a { color: inherit; text-decoration: none; }
-        .page { max-width: 980px; margin: 0 auto; padding: 24px 16px 40px; }
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .title { font-size: 24px; font-weight: 700; }
-        .subtitle { font-size: 14px; color: #6b7280; margin-top: 4px; }
-        .section { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-        .cover { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; background: #e5e7eb; }
-        .meta { font-size: 13px; color: #6b7280; display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
-        .content { font-size: 14px; line-height: 1.7; color: #374151; }
-        .toolbar { display: flex; align-items: center; gap: 12px; }
-        .btn { border: none; padding: 8px 14px; border-radius: 8px; background: #2563eb; color: #fff; font-size: 13px; cursor: pointer; }
-        .btn-outline { background: #fff; color: #2563eb; border: 1px solid #dbeafe; }
-        .empty { text-align: center; color: #9ca3af; padding: 24px 0; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+            background: #f7f7f8;
+            color: #1f2937;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+
+        .cover {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #e5e7eb;
+        }
+
+        .meta {
+            font-size: 13px;
+            color: #6b7280;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+        }
+
+        .empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 24px 0;
+        }
     </style>
 </head>
 

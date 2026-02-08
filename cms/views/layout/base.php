@@ -96,6 +96,33 @@ $isLoggedIn = Auth::check();
                                 </a>
                             </div>
                         </div>
+
+                        <!-- Travel Qidong Menu Group -->
+                        <div>
+                            <button type="button" class="w-full group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors focus:outline-none" onclick="toggleMenu('menu-travel')">
+                                <div class="flex items-center">
+                                    <svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    潮玩启东
+                                </div>
+                                <svg id="arrow-menu-travel" class="h-4 w-4 text-slate-500 transform transition-transform duration-200 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <!-- Submenu -->
+                            <div id="submenu-menu-travel" class="mt-1 space-y-1 pl-11">
+                                <a href="<?php echo View::e($base); ?>/admin/travel/categories" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    潮玩子栏目
+                                </a>
+                                <a href="<?php echo View::e($base); ?>/admin/travel/items" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    潮玩内容
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Group: Settings -->
