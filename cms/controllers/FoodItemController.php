@@ -7,11 +7,27 @@ class FoodItemController
         FoodCategory::ensureDefaults();
         $categories = FoodCategory::all();
         $categoryId = (int)($_GET['category_id'] ?? 0);
-        $items = FoodItem::allWithCategory($categoryId > 0 ? $categoryId : null);
+        $pageSize = 20;
+        $page = (int)($_GET['page'] ?? 1);
+        if ($page < 1) {
+            $page = 1;
+        }
+        $filterCategoryId = $categoryId > 0 ? $categoryId : null;
+        $total = FoodItem::countWithCategory($filterCategoryId);
+        $totalPages = (int)max(1, (int)ceil($total / $pageSize));
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+        $offset = ($page - 1) * $pageSize;
+        $items = FoodItem::allWithCategory($filterCategoryId, $pageSize, $offset);
         View::render('food/items/index', [
             'items' => $items,
             'categories' => $categories,
             'categoryId' => $categoryId,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
+            'totalPages' => $totalPages,
         ]);
     }
 

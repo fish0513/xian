@@ -1,17 +1,38 @@
 <?php
 class TravelItem
 {
-    public static function allWithCategory(?int $categoryId = null): array
+    public static function countWithCategory(?int $categoryId = null): int
     {
-        $sql = 'SELECT i.*, c.name AS category_name FROM travel_items i JOIN travel_categories c ON i.category_id = c.id';
+        $sql = 'SELECT COUNT(*) AS cnt FROM travel_items i';
         $values = [];
         if ($categoryId) {
             $sql .= ' WHERE i.category_id = ?';
             $values[] = $categoryId;
         }
-        $sql .= ' ORDER BY i.is_pinned DESC, i.is_recommended DESC, i.sort_order ASC, i.id DESC';
         $stmt = Database::pdo()->prepare($sql);
         $stmt->execute($values);
+        $row = $stmt->fetch();
+        return (int)($row['cnt'] ?? 0);
+    }
+
+    public static function allWithCategory(?int $categoryId = null, int $limit = 20, int $offset = 0): array
+    {
+        $sql = 'SELECT i.id, i.category_id, i.title, i.subtitle, i.cover_url, i.is_recommended, i.is_pinned, i.sort_order, i.is_active, i.created_at, i.updated_at, c.name AS category_name FROM travel_items i JOIN travel_categories c ON i.category_id = c.id';
+        $values = [];
+        if ($categoryId) {
+            $sql .= ' WHERE i.category_id = ?';
+            $values[] = $categoryId;
+        }
+        $sql .= ' ORDER BY i.is_pinned DESC, i.is_recommended DESC, i.sort_order ASC, i.id DESC LIMIT ? OFFSET ?';
+        $stmt = Database::pdo()->prepare($sql);
+
+        $bindIndex = 1;
+        foreach ($values as $v) {
+            $stmt->bindValue($bindIndex++, $v, PDO::PARAM_INT);
+        }
+        $stmt->bindValue($bindIndex++, max(1, $limit), PDO::PARAM_INT);
+        $stmt->bindValue($bindIndex++, max(0, $offset), PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 
@@ -105,7 +126,7 @@ class TravelItem
         return $stmt->fetchAll();
     }
 
-    public static function listCoverByCategory(int $categoryId, int $limit = 6): array
+    public static function listCoverByCategory(int $categoryId, int $limit = 3): array
     {
         $items = self::listRecommendedByCategory($categoryId, $limit);
         $remaining = $limit - count($items);
@@ -134,7 +155,7 @@ class TravelItem
         return array_merge($items, $fallback);
     }
 
-    public static function listRecommendedByCategory(int $categoryId, int $limit = 6): array
+    public static function listRecommendedByCategory(int $categoryId, int $limit = 3): array
     {
         $stmt = Database::pdo()->prepare('SELECT id, category_id, title, subtitle, cover_url, content, address, phone, business_hours, ticket_price, latitude, longitude, is_recommended, is_pinned, sort_order, is_active, created_at, updated_at FROM travel_items WHERE category_id = ? AND is_active = 1 AND is_recommended = 1 ORDER BY is_pinned DESC, sort_order ASC, id DESC LIMIT ?');
         $stmt->bindValue(1, $categoryId, PDO::PARAM_INT);

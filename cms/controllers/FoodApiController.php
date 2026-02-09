@@ -8,7 +8,7 @@ class FoodApiController
         $payload = [];
 
         foreach ($categories as $category) {
-            $items = FoodItem::listCoverByCategory((int)$category['id'], 6);
+            $items = FoodItem::listCoverByCategory((int)$category['id'], 3);
             $payload[] = [
                 'id' => (int)$category['id'],
                 'code' => $category['code'],

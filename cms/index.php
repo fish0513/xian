@@ -26,6 +26,57 @@ require __DIR__ . '/controllers/TravelCategoryController.php';
 require __DIR__ . '/controllers/TravelItemController.php';
 require __DIR__ . '/controllers/TravelApiController.php';
 
+$requireFirstExisting = static function (array $paths): void {
+    foreach ($paths as $path) {
+        if (is_file($path)) {
+            require $path;
+            return;
+        }
+    }
+};
+
+$requireFirstExisting([
+    __DIR__ . '/models/ShopCategory.php',
+    __DIR__ . '/models/shopcategory.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/models/ShopItem.php',
+    __DIR__ . '/models/shopitem.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/ShopCategoryController.php',
+    __DIR__ . '/controllers/shopcategorycontroller.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/ShopItemController.php',
+    __DIR__ . '/controllers/shopitemcontroller.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/ShopApiController.php',
+    __DIR__ . '/controllers/shopapicontroller.php',
+]);
+
+$requireFirstExisting([
+    __DIR__ . '/models/LiveCategory.php',
+    __DIR__ . '/models/livecategory.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/models/LiveItem.php',
+    __DIR__ . '/models/liveitem.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/LiveCategoryController.php',
+    __DIR__ . '/controllers/livecategorycontroller.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/LiveItemController.php',
+    __DIR__ . '/controllers/liveitemcontroller.php',
+]);
+$requireFirstExisting([
+    __DIR__ . '/controllers/LiveApiController.php',
+    __DIR__ . '/controllers/liveapicontroller.php',
+]);
+
 $router = new Router();
 
 $router->get('/admin/login', [AdminAuthController::class, 'showLogin']);
@@ -77,5 +128,45 @@ $router->post('/admin/travel/items/delete', [TravelItemController::class, 'destr
 $router->get('/api/travel/cover', [TravelApiController::class, 'cover']);
 $router->get('/api/travel/list', [TravelApiController::class, 'list']);
 $router->get('/api/travel/detail', [TravelApiController::class, 'detail']);
+
+if (class_exists(ShopCategoryController::class) && class_exists(ShopItemController::class) && class_exists(ShopApiController::class)) {
+    $router->get('/admin/shop/categories', [ShopCategoryController::class, 'index']);
+    $router->get('/admin/shop/categories/create', [ShopCategoryController::class, 'create']);
+    $router->post('/admin/shop/categories/create', [ShopCategoryController::class, 'store']);
+    $router->get('/admin/shop/categories/edit', [ShopCategoryController::class, 'edit']);
+    $router->post('/admin/shop/categories/edit', [ShopCategoryController::class, 'update']);
+    $router->post('/admin/shop/categories/delete', [ShopCategoryController::class, 'destroy']);
+
+    $router->get('/admin/shop/items', [ShopItemController::class, 'index']);
+    $router->get('/admin/shop/items/create', [ShopItemController::class, 'create']);
+    $router->post('/admin/shop/items/create', [ShopItemController::class, 'store']);
+    $router->get('/admin/shop/items/edit', [ShopItemController::class, 'edit']);
+    $router->post('/admin/shop/items/edit', [ShopItemController::class, 'update']);
+    $router->post('/admin/shop/items/delete', [ShopItemController::class, 'destroy']);
+
+    $router->get('/api/shop/cover', [ShopApiController::class, 'cover']);
+    $router->get('/api/shop/list', [ShopApiController::class, 'list']);
+    $router->get('/api/shop/detail', [ShopApiController::class, 'detail']);
+}
+
+if (class_exists(LiveCategoryController::class) && class_exists(LiveItemController::class) && class_exists(LiveApiController::class)) {
+    $router->get('/admin/live/categories', [LiveCategoryController::class, 'index']);
+    $router->get('/admin/live/categories/create', [LiveCategoryController::class, 'create']);
+    $router->post('/admin/live/categories/create', [LiveCategoryController::class, 'store']);
+    $router->get('/admin/live/categories/edit', [LiveCategoryController::class, 'edit']);
+    $router->post('/admin/live/categories/edit', [LiveCategoryController::class, 'update']);
+    $router->post('/admin/live/categories/delete', [LiveCategoryController::class, 'destroy']);
+
+    $router->get('/admin/live/items', [LiveItemController::class, 'index']);
+    $router->get('/admin/live/items/create', [LiveItemController::class, 'create']);
+    $router->post('/admin/live/items/create', [LiveItemController::class, 'store']);
+    $router->get('/admin/live/items/edit', [LiveItemController::class, 'edit']);
+    $router->post('/admin/live/items/edit', [LiveItemController::class, 'update']);
+    $router->post('/admin/live/items/delete', [LiveItemController::class, 'destroy']);
+
+    $router->get('/api/live/cover', [LiveApiController::class, 'cover']);
+    $router->get('/api/live/list', [LiveApiController::class, 'list']);
+    $router->get('/api/live/detail', [LiveApiController::class, 'detail']);
+}
 
 $router->dispatch();

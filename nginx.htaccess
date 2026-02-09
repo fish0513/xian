@@ -23,3 +23,25 @@ location /travel {
     alias "D:/www/xian/travel/app";
     try_files $uri $uri/ /travel/index.html;
 }
+
+location /shop/assets/ {
+    alias "D:/www/xian/shop/app/assets/";
+    expires 7d;
+    add_header Cache-Control "public, immutable";
+}
+
+location /shop {
+    alias "D:/www/xian/shop/app";
+    try_files $uri $uri/ /travel/index.html;
+}
+
+location /live/assets/ {
+    alias "D:/www/xian/live/app/assets/";
+    expires 7d;
+    add_header Cache-Control "public, immutable";
+}
+
+location /live {
+    alias "D:/www/xian/live/app";
+    try_files $uri $uri/ /live/index.html;
+}

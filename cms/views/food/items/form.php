@@ -352,14 +352,6 @@ $item = $item ?? [];
         });
 
         var form = document.getElementById('food-item-form');
-        if (form) {
-            form.addEventListener('submit', () => {
-                var contentInput = document.getElementById('content');
-                if (contentInput) {
-                    contentInput.value = quill.root.innerHTML;
-                }
-            });
-        }
 
         const uploadArea = document.getElementById('upload_area');
         const fileInput = document.getElementById('file_input');
@@ -376,6 +368,89 @@ $item = $item ?? [];
         const csrfTokenEl = document.querySelector('input[name="csrf_token"]');
         const csrfToken = csrfTokenEl ? csrfTokenEl.value : '';
         const baseUrl = <?php echo json_encode($base); ?>;
+
+        const uploadEditorFile = async (file) => {
+            const formData = new FormData();
+            formData.append('file', file);
+            if (csrfToken !== '') {
+                formData.append('csrf_token', csrfToken);
+            }
+            const res = await fetch(baseUrl + '/admin/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data && data.error) {
+                throw new Error(data.error);
+            }
+            const url = data && data.url ? data.url : '';
+            if (url === '') {
+                throw new Error('返回结果异常');
+            }
+            return url;
+        };
+
+        const replaceInlineImages = async (html) => {
+            const container = document.createElement('div');
+            container.innerHTML = html || '';
+            const images = Array.from(container.querySelectorAll('img'))
+                .filter(img => typeof img.src === 'string' && img.src.startsWith('data:image/'));
+
+            for (let i = 0; i < images.length; i++) {
+                const img = images[i];
+                const blob = await (await fetch(img.src)).blob();
+                const ext = (blob.type && blob.type.includes('/')) ? blob.type.split('/')[1] : 'png';
+                const file = new File([blob], `editor_${Date.now()}_${i}.${ext}`, { type: blob.type || 'image/png' });
+                const url = await uploadEditorFile(file);
+                img.src = url;
+            }
+
+            return container.innerHTML;
+        };
+
+        const toolbar = quill.getModule('toolbar');
+        if (toolbar) {
+            toolbar.addHandler('image', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.click();
+                input.onchange = async () => {
+                    if (!input.files || input.files.length === 0) return;
+                    try {
+                        const url = await uploadEditorFile(input.files[0]);
+                        const range = quill.getSelection(true);
+                        quill.insertEmbed(range ? range.index : 0, 'image', url, 'user');
+                    } catch (e) {
+                        alert('图片上传失败');
+                    } finally {
+                        input.value = '';
+                    }
+                };
+            });
+        }
+
+        if (form) {
+            let submitting = false;
+            form.addEventListener('submit', async (e) => {
+                if (submitting) return;
+                e.preventDefault();
+                const contentInput = document.getElementById('content');
+                if (!contentInput) {
+                    submitting = true;
+                    form.submit();
+                    return;
+                }
+                try {
+                    contentInput.value = quill.root.innerHTML;
+                    contentInput.value = await replaceInlineImages(contentInput.value);
+                    submitting = true;
+                    form.submit();
+                } catch (err) {
+                    alert('正文图片上传失败，请稍后重试');
+                }
+            });
+        }
 
         if (!uploadArea || !fileInput || !coverUrlInput || !previewContainer || !coverPreview || !uploadIcon || !uploadStatus) {
             return;

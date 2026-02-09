@@ -6,8 +6,28 @@ class TravelItemController
         Auth::requireLogin();
         $categoryId = (int)($_GET['category_id'] ?? 0);
         $categories = TravelCategory::all();
-        $items = TravelItem::allWithCategory($categoryId > 0 ? $categoryId : null);
-        View::render('travel/items/index', ['items' => $items, 'categories' => $categories, 'categoryId' => $categoryId]);
+        $pageSize = 20;
+        $page = (int)($_GET['page'] ?? 1);
+        if ($page < 1) {
+            $page = 1;
+        }
+        $filterCategoryId = $categoryId > 0 ? $categoryId : null;
+        $total = TravelItem::countWithCategory($filterCategoryId);
+        $totalPages = (int)max(1, (int)ceil($total / $pageSize));
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+        $offset = ($page - 1) * $pageSize;
+        $items = TravelItem::allWithCategory($filterCategoryId, $pageSize, $offset);
+        View::render('travel/items/index', [
+            'items' => $items,
+            'categories' => $categories,
+            'categoryId' => $categoryId,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
+            'totalPages' => $totalPages,
+        ]);
     }
 
     public function create(): void

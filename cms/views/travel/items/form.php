@@ -227,10 +227,20 @@ $item = $item ?? [];
             theme: 'snow',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
+                    [{
+                        'header': [1, 2, 3, false]
+                    }],
                     ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'color': [] }, { 'background': [] }],
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }],
                     ['link', 'image'],
                     ['clean']
                 ]
@@ -238,10 +248,6 @@ $item = $item ?? [];
         });
 
         var form = document.getElementById('travel-item-form');
-        form.onsubmit = function() {
-            var contentInput = document.querySelector('input[name=content]');
-            contentInput.value = quill.root.innerHTML;
-        };
 
         var uploadArea = document.getElementById('upload_area');
         var fileInput = document.getElementById('file_input');
@@ -254,6 +260,87 @@ $item = $item ?? [];
         var csrfToken = csrfTokenEl ? csrfTokenEl.value : '';
         var baseUrl = <?php echo json_encode($base); ?>;
 
+        var uploadEditorFile = async function(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            if (csrfToken !== '') formData.append('csrf_token', csrfToken);
+            var res = await fetch(baseUrl + '/admin/upload', {
+                method: 'POST',
+                body: formData
+            });
+            var data = await res.json();
+            if (data && data.error) throw new Error(data.error);
+            var url = data && data.url ? data.url : '';
+            if (url === '') throw new Error('返回结果异常');
+            return url;
+        };
+
+        var replaceInlineImages = async function(html) {
+            var container = document.createElement('div');
+            container.innerHTML = html || '';
+            var imgs = Array.prototype.slice.call(container.querySelectorAll('img'))
+                .filter(function(img) {
+                    return typeof img.src === 'string' && img.src.indexOf('data:image/') === 0;
+                });
+
+            for (var i = 0; i < imgs.length; i++) {
+                var img = imgs[i];
+                var blob = await (await fetch(img.src)).blob();
+                var ext = (blob.type && blob.type.indexOf('/') > -1) ? blob.type.split('/')[1] : 'png';
+                var file = new File([blob], 'editor_' + Date.now() + '_' + i + '.' + ext, {
+                    type: blob.type || 'image/png'
+                });
+                var url = await uploadEditorFile(file);
+                img.src = url;
+            }
+
+            return container.innerHTML;
+        };
+
+        var toolbar = quill.getModule('toolbar');
+        if (toolbar) {
+            toolbar.addHandler('image', function() {
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.click();
+                input.onchange = async function() {
+                    if (!input.files || input.files.length === 0) return;
+                    try {
+                        var url = await uploadEditorFile(input.files[0]);
+                        var range = quill.getSelection(true);
+                        quill.insertEmbed(range ? range.index : 0, 'image', url, 'user');
+                    } catch (e) {
+                        alert('图片上传失败');
+                    } finally {
+                        input.value = '';
+                    }
+                };
+            });
+        }
+
+        if (form) {
+            var submitting = false;
+            form.addEventListener('submit', async function(e) {
+                if (submitting) return;
+                e.preventDefault();
+                var contentInput = document.querySelector('input[name=content]');
+                if (!contentInput) {
+                    submitting = true;
+                    form.submit();
+                    return;
+                }
+                try {
+                    contentInput.value = quill.root.innerHTML;
+                    contentInput.value = await replaceInlineImages(contentInput.value);
+                    submitting = true;
+                    form.submit();
+                } catch (err) {
+                    alert('正文图片上传失败，请稍后重试');
+                }
+            });
+        }
+
         if (!uploadArea || !fileInput || !coverUrlInput) return;
 
         var uploadFile = function(file) {
@@ -264,8 +351,13 @@ $item = $item ?? [];
             uploadStatus.textContent = '上传中...';
             uploadStatus.className = 'text-xs font-medium mt-2 h-4 text-primary-600';
 
-            fetch(baseUrl + '/admin/upload', { method: 'POST', body: formData })
-                .then(function(r) { return r.json(); })
+            fetch(baseUrl + '/admin/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function(r) {
+                    return r.json();
+                })
                 .then(function(data) {
                     if (data && data.error) {
                         uploadStatus.textContent = '上传失败: ' + data.error;
@@ -328,7 +420,7 @@ $item = $item ?? [];
         // Initialize Ticket Price & Free Checkbox logic
         var ticketPriceInput = document.getElementById('ticket_price');
         var isFreeCheckbox = document.getElementById('is_free');
-        
+
         function updateTicketPriceState() {
             if (isFreeCheckbox) {
                 if (isFreeCheckbox.checked) {
@@ -339,7 +431,7 @@ $item = $item ?? [];
                 }
             }
         }
-        
+
         if (isFreeCheckbox) {
             isFreeCheckbox.addEventListener('change', updateTicketPriceState);
             // Initialize state on load

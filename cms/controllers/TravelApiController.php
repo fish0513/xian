@@ -8,7 +8,7 @@ class TravelApiController
         $payload = [];
 
         foreach ($categories as $category) {
-            $items = TravelItem::listCoverByCategory((int)$category['id'], 6);
+            $items = TravelItem::listCoverByCategory((int)$category['id'], 3);
             $payload[] = [
                 'id' => (int)$category['id'],
                 'code' => $category['code'],

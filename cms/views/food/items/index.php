@@ -1,5 +1,18 @@
 <?php
 $base = $GLOBALS['config']['app']['base_url'] ?? '';
+$page = (int)($page ?? 1);
+$totalPages = (int)($totalPages ?? 1);
+$total = (int)($total ?? 0);
+$pageSize = (int)($pageSize ?? 20);
+$categoryId = (int)($categoryId ?? 0);
+
+$buildUrl = function (int $targetPage) use ($base, $categoryId) {
+    $params = ['page' => $targetPage];
+    if ($categoryId > 0) {
+        $params['category_id'] = $categoryId;
+    }
+    return View::e($base) . '/admin/food/items?' . http_build_query($params);
+};
 ?>
 <div class="space-y-6">
     <div class="flex items-center justify-between">
@@ -29,6 +42,9 @@ $base = $GLOBALS['config']['app']['base_url'] ?? '';
                 </select>
                 <button type="submit" class="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200">筛选</button>
             </form>
+            <div class="ml-auto text-sm text-gray-500">
+                共 <?php echo View::e((string)$total); ?> 条 · 第 <?php echo View::e((string)$page); ?>/<?php echo View::e((string)$totalPages); ?> 页 · 每页 <?php echo View::e((string)$pageSize); ?> 条
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -108,5 +124,25 @@ $base = $GLOBALS['config']['app']['base_url'] ?? '';
                 </tbody>
             </table>
         </div>
+        <?php if ($totalPages > 1): ?>
+            <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-sm text-gray-500">
+                    第 <?php echo View::e((string)$page); ?> / <?php echo View::e((string)$totalPages); ?> 页
+                </div>
+                <div class="flex items-center gap-2">
+                    <?php if ($page > 1): ?>
+                        <a href="<?php echo $buildUrl($page - 1); ?>" class="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200">上一页</a>
+                    <?php else: ?>
+                        <span class="px-3 py-2 text-sm rounded-md bg-gray-50 text-gray-400 cursor-not-allowed">上一页</span>
+                    <?php endif; ?>
+
+                    <?php if ($page < $totalPages): ?>
+                        <a href="<?php echo $buildUrl($page + 1); ?>" class="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200">下一页</a>
+                    <?php else: ?>
+                        <span class="px-3 py-2 text-sm rounded-md bg-gray-50 text-gray-400 cursor-not-allowed">下一页</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

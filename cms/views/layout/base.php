@@ -9,7 +9,7 @@ $isLoggedIn = Auth::check();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>最鲜启东CMS管理后台</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://xian.0513.net/assets/css/3.4.17.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -120,6 +120,59 @@ $isLoggedIn = Auth::check();
                                 <a href="<?php echo View::e($base); ?>/admin/travel/items" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
                                     <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
                                     潮玩内容
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Shop Qidong Menu Group -->
+                        <div>
+                            <button type="button" class="w-full group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors focus:outline-none" onclick="toggleMenu('menu-shop')">
+                                <div class="flex items-center">
+                                    <svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7H19M7 13l1.6-8M10 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z" />
+                                    </svg>
+                                    乐购启东
+                                </div>
+                                <svg id="arrow-menu-shop" class="h-4 w-4 text-slate-500 transform transition-transform duration-200 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div id="submenu-menu-shop" class="mt-1 space-y-1 pl-11">
+                                <a href="<?php echo View::e($base); ?>/admin/shop/categories" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    乐购子栏目
+                                </a>
+                                <a href="<?php echo View::e($base); ?>/admin/shop/items" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    乐购内容
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Live Qidong Menu Group -->
+                        <div>
+                            <button type="button" class="w-full group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors focus:outline-none" onclick="toggleMenu('menu-live')">
+                                <div class="flex items-center">
+                                    <svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10" />
+                                    </svg>
+                                    宜居启东
+                                </div>
+                                <svg id="arrow-menu-live" class="h-4 w-4 text-slate-500 transform transition-transform duration-200 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div id="submenu-menu-live" class="mt-1 space-y-1 pl-11">
+                                <a href="<?php echo View::e($base); ?>/admin/live/categories" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    宜居子栏目
+                                </a>
+                                <a href="<?php echo View::e($base); ?>/admin/live/items" class="group flex items-center py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                    宜居内容
                                 </a>
                             </div>
                         </div>
