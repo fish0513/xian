@@ -1,6 +1,8 @@
 <?php
 $base = $GLOBALS['config']['app']['base_url'] ?? '';
 $isLoggedIn = Auth::check();
+$isSuperAdmin = Auth::isSuperAdmin();
+$currentAdminName = Auth::username();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN" class="h-full bg-gray-50">
@@ -181,12 +183,21 @@ $isLoggedIn = Auth::check();
                     <!-- Group: Settings -->
                     <div>
                         <h3 class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">系统设置</h3>
-                        <a href="<?php echo View::e($base); ?>/admin/admins" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md bg-slate-800 text-white">
+                        <a href="<?php echo View::e($base); ?>/admin/profile" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md bg-slate-800 text-white">
                             <svg class="mr-3 h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 20a8 8 0 0116 0" />
                             </svg>
-                            管理员管理
+                            账户设置
                         </a>
+                        <?php if ($isSuperAdmin): ?>
+                            <a href="<?php echo View::e($base); ?>/admin/admins" class="mt-1 group flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                                <svg class="mr-3 h-5 w-5 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                管理员管理
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </nav>
 
@@ -197,7 +208,7 @@ $isLoggedIn = Auth::check();
                             A
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-white truncate">Admin</p>
+                            <p class="text-sm font-medium text-white truncate"><?php echo View::e($currentAdminName); ?></p>
                             <p class="text-xs text-slate-500 truncate">系统管理员</p>
                         </div>
                         <form method="post" action="<?php echo View::e($base); ?>/admin/logout">

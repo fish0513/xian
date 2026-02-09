@@ -4,7 +4,7 @@ class AdminAuthController
     public function showLogin(): void
     {
         if (Auth::check()) {
-            Auth::redirect('/admin/admins');
+            Auth::redirect(Auth::isSuperAdmin() ? '/admin/admins' : '/admin/food/items');
         }
         View::render('auth/login', ['error' => null, 'username' => '']);
     }
@@ -26,8 +26,9 @@ class AdminAuthController
             return;
         }
 
-        Auth::login((int)$admin['id']);
-        Auth::redirect('/admin/admins');
+        $role = isset($admin['role']) ? (string)$admin['role'] : 'super';
+        Auth::login((int)$admin['id'], $role, (string)$admin['username']);
+        Auth::redirect(Auth::isSuperAdmin() ? '/admin/admins' : '/admin/food/items');
     }
 
     public function logout(): void

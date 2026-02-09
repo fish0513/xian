@@ -8,7 +8,6 @@
     
     <div class="info-card">
       <h1 class="title">{{ item.name }}</h1>
-      <div class="subtitle" v-if="item.intro">{{ item.intro }}</div>
       
       <div class="meta-info">
         <div class="meta-row" v-if="item.address">
@@ -20,6 +19,11 @@
           <span>{{ item.phone }}</span>
         </div>
       </div>
+    </div>
+
+    <div class="content-card" v-if="item.intro">
+      <div class="section-title">酒店简介</div>
+      <div class="rich-content" v-html="item.intro"></div>
     </div>
 
   </div>

@@ -11,9 +11,34 @@ class Auth
         return $_SESSION['admin_id'] ?? null;
     }
 
-    public static function login(int $adminId): void
+    public static function role(): string
+    {
+        return $_SESSION['admin_role'] ?? 'super';
+    }
+
+    public static function username(): string
+    {
+        return $_SESSION['admin_username'] ?? 'Admin';
+    }
+
+    public static function isSuperAdmin(): bool
+    {
+        return self::role() === 'super';
+    }
+
+    public static function requireSuperAdmin(): void
+    {
+        self::requireLogin();
+        if (!self::isSuperAdmin()) {
+            self::redirect('/admin/food/items');
+        }
+    }
+
+    public static function login(int $adminId, string $role = 'super', string $username = 'Admin'): void
     {
         $_SESSION['admin_id'] = $adminId;
+        $_SESSION['admin_role'] = $role;
+        $_SESSION['admin_username'] = $username;
     }
 
     public static function logout(): void

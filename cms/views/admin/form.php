@@ -1,6 +1,7 @@
 <?php
 $isEdit = ($mode ?? '') === 'edit';
 $base = $GLOBALS['config']['app']['base_url'] ?? '';
+$admin = $admin ?? [];
 ?>
 <div class="max-w-4xl mx-auto">
     <!-- Page Header -->
@@ -73,6 +74,18 @@ $base = $GLOBALS['config']['app']['base_url'] ?? '';
                             <input id="email" name="email" type="email"
                                 value="<?php echo View::e($admin['email'] ?? ''); ?>"
                                 class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="role" class="block text-sm font-medium leading-6 text-gray-900">管理员级别</label>
+                        <div class="mt-2">
+                            <select id="role" name="role"
+                                class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
+                                <?php $role = $admin['role'] ?? 'normal'; ?>
+                                <option value="normal" <?php echo $role === 'normal' ? 'selected' : ''; ?>>普通管理员</option>
+                                <option value="super" <?php echo $role === 'super' ? 'selected' : ''; ?>>超级管理员</option>
+                            </select>
                         </div>
                     </div>
 

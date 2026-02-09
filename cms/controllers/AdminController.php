@@ -3,20 +3,20 @@ class AdminController
 {
     public function index(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         $admins = Admin::all();
         View::render('admin/index', ['admins' => $admins]);
     }
 
     public function create(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         View::render('admin/form', ['admin' => null, 'error' => null, 'mode' => 'create']);
     }
 
     public function store(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         $csrf = $_POST['csrf_token'] ?? '';
         if (!Auth::verifyCsrf($csrf)) {
             View::render('admin/form', ['admin' => null, 'error' => '安全校验失败', 'mode' => 'create']);
@@ -27,6 +27,10 @@ class AdminController
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $role = trim($_POST['role'] ?? 'normal');
+        if ($role !== 'super') {
+            $role = 'normal';
+        }
 
         if ($username === '' || $password === '') {
             View::render('admin/form', ['admin' => $_POST, 'error' => '用户名和密码不能为空', 'mode' => 'create']);
@@ -44,6 +48,7 @@ class AdminController
             'password_hash' => password_hash($password, PASSWORD_DEFAULT),
             'name' => $name,
             'email' => $email,
+            'role' => $role,
         ]);
 
         Auth::redirect('/admin/admins');
@@ -51,7 +56,7 @@ class AdminController
 
     public function edit(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         $id = (int)($_GET['id'] ?? 0);
         $admin = $id ? Admin::findById($id) : null;
         if (!$admin) {
@@ -62,7 +67,7 @@ class AdminController
 
     public function update(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         $csrf = $_POST['csrf_token'] ?? '';
         if (!Auth::verifyCsrf($csrf)) {
             View::render('admin/form', ['admin' => $_POST, 'error' => '安全校验失败', 'mode' => 'edit']);
@@ -79,12 +84,19 @@ class AdminController
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $role = trim($_POST['role'] ?? '');
+        if ($role !== 'super' && $role !== 'normal') {
+            $role = '';
+        }
 
         $data = [
             'username' => $username,
             'name' => $name,
             'email' => $email,
         ];
+        if ($role !== '') {
+            $data['role'] = $role;
+        }
         if ($password !== '') {
             $data['password_hash'] = password_hash($password, PASSWORD_DEFAULT);
         }
@@ -95,13 +107,13 @@ class AdminController
 
     public function destroy(): void
     {
-        Auth::requireLogin();
+        Auth::requireSuperAdmin();
         $csrf = $_POST['csrf_token'] ?? '';
         if (!Auth::verifyCsrf($csrf)) {
             Auth::redirect('/admin/admins');
         }
         $id = (int)($_POST['id'] ?? 0);
-        if ($id > 0) {
+        if ($id > 0 && $id !== (int)Auth::id()) {
             Admin::delete($id);
         }
         Auth::redirect('/admin/admins');

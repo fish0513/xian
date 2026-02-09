@@ -1,6 +1,6 @@
 <template>
   <div class="home-page">
-    <AppHeader :show-back="false" />
+    <AppHeader :show-back="true" :on-back="() => router.back()" />
 
     <div v-if="loading" class="state-container">
       <van-loading color="#fff" />

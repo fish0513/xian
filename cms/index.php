@@ -14,6 +14,7 @@ require __DIR__ . '/core/Router.php';
 require __DIR__ . '/models/Admin.php';
 require __DIR__ . '/controllers/AdminAuthController.php';
 require __DIR__ . '/controllers/AdminController.php';
+require __DIR__ . '/controllers/AdminProfileController.php';
 require __DIR__ . '/models/FoodCategory.php';
 require __DIR__ . '/models/FoodItem.php';
 require __DIR__ . '/controllers/FoodCategoryController.php';
@@ -82,6 +83,9 @@ $router = new Router();
 $router->get('/admin/login', [AdminAuthController::class, 'showLogin']);
 $router->post('/admin/login', [AdminAuthController::class, 'login']);
 $router->post('/admin/logout', [AdminAuthController::class, 'logout']);
+
+$router->get('/admin/profile', [AdminProfileController::class, 'edit']);
+$router->post('/admin/profile', [AdminProfileController::class, 'update']);
 
 $router->get('/admin/admins', [AdminController::class, 'index']);
 $router->get('/admin/admins/create', [AdminController::class, 'create']);
